@@ -1,0 +1,29 @@
+---
+title: "Prepforfinal"
+author: "Yuhan Wu"
+date: "6/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+```
+
+```{r}
+file_test1 <- "BOXRSA.csv"
+file_test2 <- "NYXRSA.csv"
+read.csv(file_test1)
+read.csv(file_test2)
+  
+
+  #mutate(Months= str_sub(DATE,6,7))%>%
+  #ggplot(mapping = aes(x=DATE,y= BOXRSA,group = 1))+
+  #geom_line(method= loess, formula=y~x)+
+  #geom_smooth()
+```
+
+```{r}
+
+```
+
