@@ -37,9 +37,12 @@ clean_data <- bind_rows(data_BO,data_NY,data_SF)%>%
 
 ```{r}
 clean_data %>%
+  #mutate(DATE=parse_date(DATE))%>%
+  group_by(City) %>%
 ggplot(mapping=aes(x =DATE,y=Data,color=City))+
   geom_point()+
-  geom_smooth(method="lm",formula=y~x)
+  geom_smooth(se= FALSE,method='lm',formula=y~x)+
+  scale_x_discrete(guide = guide_axis(n.dodge=3))
 
 ```
 
