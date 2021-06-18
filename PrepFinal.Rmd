@@ -11,19 +11,38 @@ library(tidyverse)
 ```
 
 ```{r}
-file_test1 <- "BOXRSA.csv"
-file_test2 <- "NYXRSA.csv"
-read.csv(file_test1)
-read.csv(file_test2)
-  
 
-  #mutate(Months= str_sub(DATE,6,7))%>%
-  #ggplot(mapping = aes(x=DATE,y= BOXRSA,group = 1))+
-  #geom_line(method= loess, formula=y~x)+
-  #geom_smooth()
+
+raw_data_BO <- read.csv("BOXRSA.csv")
+raw_data_NY <- read.csv("NYXRSA.csv")
+raw_data_SF <- read.csv("SFXRSA.csv")
+
+data_BO <- raw_data_BO %>%
+mutate(City="Boston") %>%
+mutate(Data= BOXRSA)
+
+data_NY <- raw_data_NY %>%
+  mutate(City="New York")%>%
+  mutate(Data= NYXRSA)
+
+data_SF <- raw_data_SF %>%
+  mutate(City ="San Francisco")%>%
+mutate(Data= SFXRSA)
+clean_data <- bind_cols(data_BO,data_NY,data_SF)
+clean_data <- bind_rows(data_BO,data_NY,data_SF)%>%
+  select(DATE,Data,City)
+
+
 ```
 
 ```{r}
+clean_data %>%
+ggplot(mapping=aes(x =DATE,y=Data,color=City))+
+  geom_point()+
+  geom_smooth(method="lm",formula=y~x)
 
 ```
+
+
+
 
