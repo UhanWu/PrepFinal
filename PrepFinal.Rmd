@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 ```
 
-```{r}
+```{r,echo=FALSE}
 
 
 raw_data_BO <- read.csv("BOXRSA.csv")
@@ -28,21 +28,19 @@ data_NY <- raw_data_NY %>%
 data_SF <- raw_data_SF %>%
   mutate(City ="San Francisco")%>%
 mutate(Data= SFXRSA)
-clean_data <- bind_cols(data_BO,data_NY,data_SF)
-clean_data <- bind_rows(data_BO,data_NY,data_SF)%>%
-  select(DATE,Data,City)
+clean_data <- bind_rows(data_BO,data_NY,data_SF)
 
 
-```
 
-```{r}
 clean_data %>%
-  #mutate(DATE=parse_date(DATE))%>%
+mutate(Date_new=str_sub(DATE, 1,7)) %>%
+select(Date_new,Data,City)%>%
   group_by(City) %>%
-ggplot(mapping=aes(x =DATE,y=Data,color=City))+
-  geom_point()+
-  geom_smooth(se= FALSE,method='lm',formula=y~x)+
-  scale_x_discrete(guide = guide_axis(n.dodge=3))
+ggplot(mapping=aes(x = Date_new,y=Data,color=City,group=1))+
+  geom_line()+
+  #geom_smooth(se = FALSE,method='loess',formula=y~x)+
+  scale_x_discrete(breaks=12)+
+  labs(title="Housing Price fluctuation between 1984 and 2021 of three Cities", subtitle = "San Francisco endured the greatest decline in year 2008",x="Time (1987-2021)",y="Case-Shiller index")
 
 ```
 
