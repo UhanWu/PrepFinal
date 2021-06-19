@@ -8,6 +8,9 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
+library(lubridate)
+library(dplyr)
+library(plotly)
 ```
 
 ```{r,echo=FALSE}
@@ -28,22 +31,31 @@ data_NY <- raw_data_NY %>%
 data_SF <- raw_data_SF %>%
   mutate(City ="San Francisco")%>%
 mutate(Data= SFXRSA)
-clean_data <- bind_rows(data_BO,data_NY,data_SF)
 
-
-
-clean_data %>%
-mutate(Date_new=str_sub(DATE, 1,7)) %>%
-select(Date_new,Data,City)%>%
-  group_by(City) %>%
-ggplot(mapping=aes(x = Date_new,y=Data,color=City,group=1))+
-  geom_line()+
-  #geom_smooth(se = FALSE,method='loess',formula=y~x)+
-  scale_x_discrete(breaks=12)+
-  labs(title="Housing Price fluctuation between 1984 and 2021 of three Cities", subtitle = "San Francisco endured the greatest decline in year 2008",x="Time (1987-2021)",y="Case-Shiller index")
-
+clean_data <-bind_rows(data_BO,data_NY,data_SF)
 ```
 
+```{r,echo=FALSE}
+data_final <- clean_data %>%
+  mutate(date_new = ymd(DATE))%>%
+select(DATE,Data,City)%>%
+  group_by(City) 
+```
+
+```{r,echo=FALSE}
+ 
+data_plotly <- data_final%>%
+ggplot(mapping=aes(x = DATE,y=Data,color=City,group=1, text = paste("Date:",DATE, "\n")))+
+  geom_line()+
+  scale_x_discrete(breaks=12)+
+  labs(title="Housing Price fluctuation between 1984 and 2021 of Three Cities", subtitle = "San Francisco endured the greatest decline in year 2008",x="Time (1987-2021)",y="Case-Shiller index",fill="City")+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggplotly(data_plotly, tooltip = "text")
+```
+
+```{r}
+
+```
 
 
 
