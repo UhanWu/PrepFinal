@@ -37,9 +37,19 @@ clean_data <-bind_rows(data_BO,data_NY,data_SF)
 
 ```{r,echo=FALSE}
 data_final <- clean_data %>%
-  mutate(date_new = ymd(DATE))%>%
 select(DATE,Data,City)%>%
   group_by(City) 
+```
+
+```{r}
+data_plotly <- data_final%>%
+ggplot(mapping=aes(x = DATE,y=Data,color=City,group=1, text = paste("Date:",DATE, "\n")))+
+  geom_line()+
+  scale_x_discrete(breaks=12)+
+  labs(title="Housing Price fluctuation between 1984 and 2021 of three Cities", subtitle = "San Francisco endured the greatest decline in year 2008",x="Time (1987-2021)",y="Case-Shiller index")
+
+   ggplotly(data_plotly, tooltip = "text")
+
 ```
 
 
