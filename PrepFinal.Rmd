@@ -11,6 +11,12 @@ library(tidyverse)
 library(lubridate)
 library(dplyr)
 library(plotly)
+library(gganimate)
+library(gifski)
+library(png)
+library(patchwork)
+library(gapminder)
+
 ```
 
 ```{r,echo=FALSE}
@@ -51,6 +57,19 @@ ggplot(mapping=aes(x = DATE,y=Data,color=City,group=1, text = paste("Date:",DATE
    ggplotly(data_plotly, tooltip = "text")
 
 ```
+
+clean_data %>%
+  filter(region == "TotalUS") %>%
+  ggplot(aes(Date, `Total Volume`/1000000, color = type))+
+  geom_line()+
+  transition_reveal(Date)+
+  labs(title = "The Volume of Avocados Sold Over Time by Type of Fruit",
+      subtitle = "The overall volume of avocados has significant fluctuations depending on the type of fruit",
+        y = "Total Volume in Millions", color = "Type of Avocado")+
+    view_follow(fixed_y = TRUE)
+    
+    
+library(tidyverse)
 
 
 
